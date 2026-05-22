@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Portfolio SAE — BUT Informatique</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap"
+        rel="stylesheet">
+    <style>
+        .bg-decor {
+            position: fixed;
+            inset: 0;
+            z-index: -10;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .square-grid {
+            display: grid;
+            grid-template-columns: repeat(24, 1fr);
+            grid-template-rows: repeat(14, 1fr);
+            gap: 6px;
+            padding: 10px;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        .grid-cell {
+            border-radius: 6px;
+            will-change: transform, opacity;
+        }
+
+        .click-ripple {
+            position: fixed;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.60);
+            pointer-events: none;
+            z-index: -5;
+            transform: translate(-50%, -50%) scale(0);
+            animation: rippleExpand 0.65s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+
+        @keyframes rippleExpand {
+            0% {
+                transform: translate(-50%, -50%) scale(0);
+                opacity: 0.7;
+            }
+
+            100% {
+                transform: translate(-50%, -50%) scale(16);
+                opacity: 0;
+            }
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+                transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal-delay-1 {
+            transition-delay: 0.05s;
+        }
+
+        .reveal-delay-2 {
+            transition-delay: 0.12s;
+        }
+
+        .reveal-delay-3 {
+            transition-delay: 0.19s;
+        }
+
+        .reveal-delay-4 {
+            transition-delay: 0.26s;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        .section-divider {
+            width: 48px;
+            height: 4px;
+            border-radius: 999px;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+        }
+
+        .card-lift {
+            transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+                box-shadow 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .card-lift:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.04);
+        }
+
+        .sae-panel {
+            transition: opacity 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .sae-panel.hiding {
+            opacity: 0;
+            pointer-events: none;
+        }
+    </style>
+</head>
+
+<body class="text-gray-900 antialiased min-h-screen">
+
+    <div class="bg-decor">
+        <div class="square-grid" id="squareGrid"></div>
+    </div>
+
+    <nav class="fixed top-5 left-1/2 -translate-x-1/2 z-50 bg-white/70 backdrop-blur-2xl border border-gray-200/40 shadow-sm rounded-full px-2 py-2 flex items-center gap-1"
+        id="navbar">
+        <a href="#accueil"
+            class="nav-link px-5 py-2 rounded-full text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors duration-200 flex items-center gap-2"
+            data-section="accueil">
+            <i class="fa-solid fa-house text-sm"></i>
+            <span class="hidden sm:inline">Accueil</span>
+        </a>
+        <a href="#sae"
+            class="nav-link px-5 py-2 rounded-full text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors duration-200 flex items-center gap-2"
+            data-section="sae">
+            <i class="fa-solid fa-folder-open text-sm"></i>
+            <span class="hidden sm:inline">SAE</span>
+        </a>
+    </nav>
+
+    <main class="pt-32 pb-24 px-5 max-w-4xl mx-auto">
+
+        <section id="accueil" class="mb-24 scroll-mt-28 reveal visible">
+            <div class="flex flex-col items-center text-center mb-6">
+                <div class="w-20 h-20 rounded-full bg-white
+                    flex items-center justify-center text-3xl text-blue-600
+                    shadow-sm shadow-blue-200/30 mb-5">
+                    <i class="fa-solid fa-user-graduate"></i>
+                </div>
+                <h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight text-gray-900 mb-3">
+                    Portfolio SAE
+                </h1>
+                <p class="text-lg text-gray-500 max-w-lg leading-relaxed">
+                    BUT2 Informatique · Travaux réalisés, compétences acquises et retours d'expérience.
+                </p>
+            </div>
+
+            <div class="flex flex-wrap justify-center gap-2.5 mt-6">
+                <span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold
+                     bg-blue-50 text-blue-700 border border-blue-100">
+                    <i class="fa-solid fa-code text-[10px]"></i> Développement
+                </span>
+                <span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold
+                     bg-emerald-50 text-emerald-700 border border-emerald-100">
+                    <i class="fa-solid fa-database text-[10px]"></i> Base de données
+                </span>
+                <span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold
+                     bg-amber-50 text-amber-700 border border-amber-100">
+                    <i class="fa-solid fa-paint-brush text-[10px]"></i> Design
+                </span>
+                <span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold
+                     bg-rose-50 text-rose-700 border border-rose-100">
+                    <i class="fa-solid fa-chart-simple text-[10px]"></i> Analyse
+                </span>
+            </div>
+        </section>
+
+        <section id="sae" class="scroll-mt-28">
+            <div class="mb-2">
+                <h2 class="text-3xl sm:text-4xl font-bold text-gray-900">Mes SAE</h2>
+                <p class="text-gray-500 mt-2 mb-4">Projets réalisés en BUT2 Informatique</p>
+                <div class="section-divider mb-10"></div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="sae-container"></div>
+        </section>
+
+    </main>
+
+    <script src="sae.js"></script>
+    <script src="navbar.js"></script>
+    <script src="grid.js"></script>
+</body>
+
+</html>
