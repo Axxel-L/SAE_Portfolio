@@ -1,7 +1,9 @@
 /**
- * Génère une grille 24×14 de carrés colorés et les anime en continu :
- * magnet (attraction souris), épulsion au clic,
- * ripple blanc, drift autonome et parallaxe au scroll.
+ * Grille 24×14 de carrés animés — palette sombre monochrome.
+ * Magnet (attraction souris), épulsion au clic,
+ * ripple blanc discret, drift autonome. Fond fixe.
+ *
+ * Optimisé : opacité relevée, lerp plus rapide, drift amplifié.
  */
 
 (function () {
@@ -21,13 +23,16 @@
   var frag = document.createDocumentFragment();
   for (var r = 0; r < ROWS; r++) {
     for (var c = 0; c < COLS; c++) {
-      var hue = 215 + (c / (COLS - 1)) * 145;
-      var sat = 55 + (r / (ROWS - 1)) * 18;
-      var lit = 83 + (r / (ROWS - 1)) * 10;
+      // Palette sombre monochrome : gris ardoise quasi-noir
+      // Luminosité 9-23 % (plus visible), saturation 6-14 % (léger caractère)
+      var hue = 222;
+      var sat = 6 + (c / (COLS - 1)) * 8;
+      var lit = 9 + (r / (ROWS - 1)) * 14;
+
       var cell = document.createElement('div');
       cell.className = 'grid-cell';
       cell.style.backgroundColor = 'hsl(' + hue + ', ' + sat + '%, ' + lit + '%)';
-      cell.style.border = '1px solid rgba(0,0,0,0.05)';
+      cell.style.border = '1px solid rgba(255,255,255,0.05)';
       frag.appendChild(cell);
       cells.push({ el: cell, cx: c / (COLS - 1), cy: r / (ROWS - 1), row: r });
     }
@@ -39,8 +44,6 @@
   // =========================================================================
 
   var running       = true;
-  var prevScroll    = window.pageYOffset;
-  var scrollVel     = 0;
   var mx = 0.5, my  = 0.5;
   var tMx = 0.5, tMy = 0.5;
   var clickX = 0.5, clickY = 0.5;
@@ -77,19 +80,13 @@
   // 4. BOUCLE D'ANIMATION
   // =========================================================================
 
-  /**
-   * @param {number} ts - DOMHighResTimeStamp.
-   */
   function frame(ts) {
     if (!running) return requestAnimationFrame(frame);
     var sec = ts * 0.001;
 
-    var curScroll = window.pageYOffset;
-    scrollVel += ((curScroll - prevScroll) - scrollVel) * 0.07;
-    prevScroll = curScroll;
-
-    mx += (tMx - mx) * 0.05;
-    my += (tMy - my) * 0.05;
+    // Magnet : lerp 2× plus réactif (0.05 → 0.10)
+    mx += (tMx - mx) * 0.10;
+    my += (tMy - my) * 0.10;
 
     var expAge = sec - explosionTime;
     var hasExp = expAge < 1.5;
@@ -101,8 +98,9 @@
       var dist = Math.sqrt(dx * dx + dy * dy);
       var inf  = Math.max(0, 1 - dist * 2.0);
 
-      var pullX = dx * inf * 22;
-      var pullY = dy * inf * 22;
+      // Pull : force augmentée (22 → 34)
+      var pullX = dx * inf * 34;
+      var pullY = dy * inf * 34;
 
       var pushX = 0, pushY = 0, expScale = 0, expOp = 0;
       if (hasExp) {
@@ -112,25 +110,27 @@
         var delay = dc * 0.08;
         var ea    = Math.max(0, expAge - delay);
         var force = Math.exp(-ea * 5.5) * Math.exp(-dc * 1.6);
-        pushX    = dxc * force * 38;
-        pushY    = dyc * force * 38;
-        expScale = force * 0.18;
-        expOp    = force * 0.25;
+        // Explosion : force amplifiée (38 → 52, scale ×0.18 → ×0.26, op ×0.25 → ×0.35)
+        pushX    = dxc * force * 52;
+        pushY    = dyc * force * 52;
+        expScale = force * 0.26;
+        expOp    = force * 0.35;
       }
 
-      var s   = 0.78 + inf * 0.45 + expScale;
+      // Scale base plus grande (0.78 → 0.84) pour des carrés plus présents
+      var s   = 0.84 + inf * 0.45 + expScale;
       var rot = (dx * dy) * inf * 2.5;
-      var op  = 0.25 + inf * 0.55 + expOp;
+      // Opacité base relevée (0.25 → 0.42) — bien visible sur fond noir
+      var op  = 0.42 + inf * 0.55 + expOp;
 
+      // Drift : plus rapide (0.35→0.72, 0.30→0.60) et plus ample (3.5→6.5, 2.5→5)
       var phase = c.cx * 4 + c.cy * 3;
-      var dftX  = Math.sin(sec * 0.35 + phase) * 3.5;
-      var dftY  = Math.cos(sec * 0.30 + phase) * 2.5;
-
-      var paraY = curScroll * 0.018 * (1 + c.row / ROWS);
+      var dftX  = Math.sin(sec * 0.72 + phase) * 6.5;
+      var dftY  = Math.cos(sec * 0.60 + phase) * 5;
 
       c.el.style.transform =
         'translate3d(' + (pullX + dftX + pushX).toFixed(1) + 'px, ' +
-                         (pullY + dftY + paraY + pushY).toFixed(1) + 'px, 0) ' +
+                         (pullY + dftY + pushY).toFixed(1) + 'px, 0) ' +
         'scale(' + s.toFixed(2) + ') rotate(' + rot.toFixed(2) + 'deg)';
       c.el.style.opacity = op.toFixed(2);
     }

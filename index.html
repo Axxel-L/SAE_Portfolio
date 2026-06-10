@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Portfolio SAE — BUT Informatique</title>
+    <title>Portfolio · BUT Informatique</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -20,10 +20,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
     <style>
+        /* Minimum vital — animations de fond impossibles en Tailwind pur */
         .bg-decor {
             position: fixed;
             inset: 0;
@@ -52,154 +51,494 @@
             width: 36px;
             height: 36px;
             border-radius: 50%;
-            background: rgba(255, 255, 255, 0.60);
+            background: rgba(255, 255, 255, 0.15);
             pointer-events: none;
             z-index: -5;
             transform: translate(-50%, -50%) scale(0);
-            animation: rippleExpand 0.65s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+            animation: rippleExpand 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards;
         }
 
         @keyframes rippleExpand {
             0% {
                 transform: translate(-50%, -50%) scale(0);
-                opacity: 0.7;
+                opacity: 0.6;
             }
-
             100% {
-                transform: translate(-50%, -50%) scale(16);
+                transform: translate(-50%, -50%) scale(22);
                 opacity: 0;
             }
-        }
-
-        .reveal {
-            opacity: 0;
-            transform: translateY(24px);
-            transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
-                transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
-        }
-
-        .reveal.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .reveal-delay-1 {
-            transition-delay: 0.05s;
-        }
-
-        .reveal-delay-2 {
-            transition-delay: 0.12s;
-        }
-
-        .reveal-delay-3 {
-            transition-delay: 0.19s;
-        }
-
-        .reveal-delay-4 {
-            transition-delay: 0.26s;
         }
 
         html {
             scroll-behavior: smooth;
         }
-
-        .section-divider {
-            width: 48px;
-            height: 4px;
-            border-radius: 999px;
-            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
-        }
-
-        .card-lift {
-            transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
-                box-shadow 0.3s cubic-bezier(0.22, 1, 0.36, 1);
-        }
-
-        .card-lift:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.04);
-        }
-
-        .sae-panel {
-            transition: opacity 0.28s cubic-bezier(0.22, 1, 0.36, 1);
-        }
-        .sae-panel.hiding {
-            opacity: 0;
-            pointer-events: none;
-        }
     </style>
 </head>
 
-<body class="text-gray-900 antialiased min-h-screen">
+<body class="bg-gray-950 text-white antialiased min-h-screen">
 
+    <!-- Fond animé -->
     <div class="bg-decor">
         <div class="square-grid" id="squareGrid"></div>
     </div>
 
-    <nav class="fixed top-5 left-1/2 -translate-x-1/2 z-50 bg-white/70 backdrop-blur-2xl border border-gray-200/40 shadow-sm rounded-full px-2 py-2 flex items-center gap-1"
+    <!-- ═══════════════════════════════════════ -->
+    <!-- NAVBAR — Liquid-glass pill -->
+    <!-- ═══════════════════════════════════════ -->
+    <nav class="fixed top-5 left-1/2 -translate-x-1/2 z-50 bg-black/40 backdrop-blur-2xl border border-white/10 shadow-lg shadow-black/30 rounded-full px-2 py-2 flex items-center gap-0.5"
         id="navbar">
         <a href="#accueil"
-            class="nav-link px-5 py-2 rounded-full text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors duration-200 flex items-center gap-2"
+            class="nav-link px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-sm font-medium text-gray-400 hover:text-white transition-colors duration-200 flex items-center gap-1.5"
             data-section="accueil">
-            <i class="fa-solid fa-house text-sm"></i>
+            <i class="fa-solid fa-house text-xs"></i>
             <span class="hidden sm:inline">Accueil</span>
         </a>
         <a href="#sae"
-            class="nav-link px-5 py-2 rounded-full text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors duration-200 flex items-center gap-2"
+            class="nav-link px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-sm font-medium text-gray-400 hover:text-white transition-colors duration-200 flex items-center gap-1.5"
             data-section="sae">
-            <i class="fa-solid fa-folder-open text-sm"></i>
-            <span class="hidden sm:inline">SAE</span>
+            <i class="fa-solid fa-folder-open text-xs"></i>
+            <span class="hidden sm:inline">SAÉ</span>
         </a>
+        <a href="#tp"
+            class="nav-link px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-sm font-medium text-gray-400 hover:text-white transition-colors duration-200 flex items-center gap-1.5"
+            data-section="tp">
+            <i class="fa-solid fa-flask text-xs"></i>
+            <span class="hidden sm:inline">TP</span>
+        </a>
+        <a href="#stage"
+            class="nav-link px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-sm font-medium text-gray-400 hover:text-white transition-colors duration-200 flex items-center gap-1.5"
+            data-section="stage">
+            <i class="fa-solid fa-building text-xs"></i>
+            <span class="hidden sm:inline">Stage</span>
+        </a>
+        <a href="#projets"
+            class="nav-link px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-sm font-medium text-gray-400 hover:text-white transition-colors duration-200 flex items-center gap-1.5"
+            data-section="projets">
+            <i class="fa-solid fa-star text-xs"></i>
+            <span class="hidden sm:inline">Projets</span>
+        </a>
+
     </nav>
 
-    <main class="pt-32 pb-24 px-5 max-w-4xl mx-auto">
+    <!-- ═══════════════════════════════════════ -->
+    <!-- CONTENU PRINCIPAL -->
+    <!-- ═══════════════════════════════════════ -->
+    <main class="pt-32 pb-24 px-5 max-w-5xl mx-auto">
 
-        <section id="accueil" class="mb-24 scroll-mt-28 reveal visible">
-            <div class="flex flex-col items-center text-center mb-6">
-                <div class="w-20 h-20 rounded-full bg-white
-                    flex items-center justify-center text-3xl text-blue-600
-                    shadow-sm shadow-blue-200/30 mb-5">
+        <!-- ───── ACCUEIL ───── -->
+        <section id="accueil" class="mb-32 scroll-mt-28">
+            <div class="flex flex-col items-center text-center mb-8">
+                <div class="w-20 h-20 rounded-full bg-white/10 backdrop-blur-md border border-white/10 flex items-center justify-center text-3xl text-white/80 mb-5">
                     <i class="fa-solid fa-user-graduate"></i>
                 </div>
-                <h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight text-gray-900 mb-3">
+                <h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight text-white mb-3">
                     Portfolio SAE
                 </h1>
-                <p class="text-lg text-gray-500 max-w-lg leading-relaxed">
+                <p class="text-lg text-gray-400 max-w-lg leading-relaxed">
                     BUT2 Informatique · Travaux réalisés, compétences acquises et retours d'expérience.
                 </p>
             </div>
+        </section>
 
-            <div class="flex flex-wrap justify-center gap-2.5 mt-6">
-                <span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold
-                     bg-blue-50 text-blue-700 border border-blue-100">
-                    <i class="fa-solid fa-code text-[10px]"></i> Développement
-                </span>
-                <span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold
-                     bg-emerald-50 text-emerald-700 border border-emerald-100">
-                    <i class="fa-solid fa-database text-[10px]"></i> Base de données
-                </span>
-                <span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold
-                     bg-amber-50 text-amber-700 border border-amber-100">
-                    <i class="fa-solid fa-paint-brush text-[10px]"></i> Design
-                </span>
-                <span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold
-                     bg-rose-50 text-rose-700 border border-rose-100">
-                    <i class="fa-solid fa-chart-simple text-[10px]"></i> Analyse
-                </span>
+        <!-- ───── SAÉ ───── -->
+        <section id="sae" class="mb-32 scroll-mt-28">
+            <h2 class="text-3xl sm:text-4xl font-bold text-white mb-2">Mes SAÉ</h2>
+            <p class="text-gray-400 mb-6">Situations d'Apprentissage et d'Évaluation · BUT2 Informatique</p>
+            <div class="w-12 h-1 rounded-full bg-gradient-to-r from-white/40 to-white/10 mb-10"></div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5" id="sae-container">
+                <!-- Rempli dynamiquement par sae.js -->
             </div>
         </section>
 
-        <section id="sae" class="scroll-mt-28">
-            <div class="mb-2">
-                <h2 class="text-3xl sm:text-4xl font-bold text-gray-900">Mes SAE</h2>
-                <p class="text-gray-500 mt-2 mb-4">Projets réalisés en BUT2 Informatique</p>
-                <div class="section-divider mb-10"></div>
+        <!-- ───── TP ───── -->
+        <section id="tp" class="mb-32 scroll-mt-28">
+            <h2 class="text-3xl sm:text-4xl font-bold text-white mb-2">Travaux Pratiques</h2>
+            <p class="text-gray-400 mb-6">Projets et exercices réalisés en cours · BUT2 Informatique</p>
+            <div class="w-12 h-1 rounded-full bg-gradient-to-r from-white/40 to-white/10 mb-10"></div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+
+                <!-- Tableau via WebGL -->
+                <div class="bg-white/[0.04] backdrop-blur-md border border-white/[0.08] rounded-2xl p-5 hover:bg-white/[0.06] hover:border-white/[0.15] transition-all duration-300 group">
+                    <div class="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center text-lg text-white/60 mb-4 group-hover:text-white/80 transition-colors">
+                        <i class="fa-solid fa-cube"></i>
+                    </div>
+                    <h3 class="font-semibold text-white mb-1">Tableau 3D · WebGL</h3>
+                    <p class="text-xs text-gray-500 mb-3">Three.js · WebGL</p>
+                    <p class="text-sm text-gray-400 leading-relaxed">Reproduction d'un tableau réel en scène 3D interactive sur le web avec Three.js. Très sympa visuellement mais complexe : placement des éléments en 2D délicat, gestion de la skybox fastidieuse, ombres capricieuses et textures qui buguent par moments.</p>
+                </div>
+
+                <!-- WikiCoaster -->
+                <div class="bg-white/[0.04] backdrop-blur-md border border-white/[0.08] rounded-2xl p-5 hover:bg-white/[0.06] hover:border-white/[0.15] transition-all duration-300 group">
+                    <div class="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center text-lg text-white/60 mb-4 group-hover:text-white/80 transition-colors">
+                        <i class="fa-solid fa-globe"></i>
+                    </div>
+                    <h3 class="font-semibold text-white mb-1">WikiCoaster</h3>
+                    <p class="text-xs text-gray-500 mb-3">Symfony · PHP</p>
+                    <p class="text-sm text-gray-400 leading-relaxed">Site web réalisé avec le framework Symfony. Beaucoup de concepts à maîtriser au début (routes, contrôleurs, entités, migrations, Twig) mais une fois qu'on a compris la logique, le framework devient incroyablement puissant et productif.</p>
+                </div>
+
+                <!-- Interfaces graphiques Three.js -->
+                <div class="bg-white/[0.04] backdrop-blur-md border border-white/[0.08] rounded-2xl p-5 hover:bg-white/[0.06] hover:border-white/[0.15] transition-all duration-300 group">
+                    <div class="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center text-lg text-white/60 mb-4 group-hover:text-white/80 transition-colors">
+                        <i class="fa-solid fa-cubes"></i>
+                    </div>
+                    <h3 class="font-semibold text-white mb-1">Interfaces Graphiques 3D</h3>
+                    <p class="text-xs text-gray-500 mb-3">Three.js · WebGL</p>
+                    <p class="text-sm text-gray-400 leading-relaxed">Création d'interfaces graphiques en 3D avec Three.js. Très fun à réaliser mais la complexité est réelle : indispensable de jongler entre documentations, exemples et IA pour s'en sortir sur les calculs de position, les lumières et les caméras.</p>
+                </div>
+
+                <!-- Application Swift -->
+                <div class="bg-white/[0.04] backdrop-blur-md border border-white/[0.08] rounded-2xl p-5 hover:bg-white/[0.06] hover:border-white/[0.15] transition-all duration-300 group">
+                    <div class="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center text-lg text-white/60 mb-4 group-hover:text-white/80 transition-colors">
+                        <i class="fa-brands fa-apple"></i>
+                    </div>
+                    <h3 class="font-semibold text-white mb-1">Application iOS · Swift</h3>
+                    <p class="text-xs text-gray-500 mb-3">Swift · SwiftUI</p>
+                    <p class="text-sm text-gray-400 leading-relaxed">Création d'une application native iOS avec Swift et SwiftUI. Expérience incroyable : concevoir sa propre app et la tester directement sur son iPhone en temps réel. SwiftUI rend la création d'interfaces étonnamment facile et intuitive.</p>
+                </div>
+
+                <!-- API Toutaix -->
+                <div class="bg-white/[0.04] backdrop-blur-md border border-white/[0.08] rounded-2xl p-5 hover:bg-white/[0.06] hover:border-white/[0.15] transition-all duration-300 group">
+                    <div class="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center text-lg text-white/60 mb-4 group-hover:text-white/80 transition-colors">
+                        <i class="fa-solid fa-server"></i>
+                    </div>
+                    <h3 class="font-semibold text-white mb-1">API Toutaix</h3>
+                    <p class="text-xs text-gray-500 mb-3">Docker · API REST</p>
+                    <p class="text-sm text-gray-400 leading-relaxed">Déploiement progressif d'une API en vue d'un projet noté. Assez simple à gérer grâce à Docker : chaque modification se déploie facilement, les conteneurs isolent les services et permettent des mises à jour rapides sans casser l'existant.</p>
+                </div>
+
+                <!-- Application Flutter -->
+                <div class="bg-white/[0.04] backdrop-blur-md border border-white/[0.08] rounded-2xl p-5 hover:bg-white/[0.06] hover:border-white/[0.15] transition-all duration-300 group">
+                    <div class="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center text-lg text-white/60 mb-4 group-hover:text-white/80 transition-colors">
+                        <i class="fa-solid fa-mobile-screen-button"></i>
+                    </div>
+                    <h3 class="font-semibold text-white mb-1">Application Flutter</h3>
+                    <p class="text-xs text-gray-500 mb-3">Flutter · Dart</p>
+                    <p class="text-sm text-gray-400 leading-relaxed">Création d'une application mobile cross-platform avec Flutter. Intéressant et puissant, mais le langage Dart a une courbe d'apprentissage raide et Gradle peut poser problème si les versions du SDK Android et de Flutter ne sont pas parfaitement alignées.</p>
+                </div>
+
+                <!-- API database first -->
+                <div class="bg-white/[0.04] backdrop-blur-md border border-white/[0.08] rounded-2xl p-5 hover:bg-white/[0.06] hover:border-white/[0.15] transition-all duration-300 group">
+                    <div class="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center text-lg text-white/60 mb-4 group-hover:text-white/80 transition-colors">
+                        <i class="fa-solid fa-database"></i>
+                    </div>
+                    <h3 class="font-semibold text-white mb-1">API · Database First</h3>
+                    <p class="text-xs text-gray-500 mb-3">Docker · API</p>
+                    <p class="text-sm text-gray-400 leading-relaxed">Création d'une API simple en approche database first. Facile à mettre en place et à maintenir grâce à Docker : le schéma de base pilote la génération du code, les conteneurs assurent la cohérence de l'environnement entre les membres de l'équipe.</p>
+                </div>
+
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="sae-container"></div>
+        </section>
+
+        <!-- ───── STAGE ───── -->
+        <section id="stage" class="mb-32 scroll-mt-28">
+            <h2 class="text-3xl sm:text-4xl font-bold text-white mb-2">Stage</h2>
+            <p class="text-gray-400 mb-6">Expérience professionnelle · BUT2 Informatique</p>
+            <div class="w-12 h-1 rounded-full bg-gradient-to-r from-white/40 to-white/10 mb-10"></div>
+
+            <div class="bg-white/[0.04] backdrop-blur-md border border-white/[0.08] rounded-2xl p-6 sm:p-8 hover:bg-white/[0.06] hover:border-white/[0.15] transition-all duration-300">
+                <div class="flex flex-col sm:flex-row sm:items-start gap-5">
+                    <div class="w-14 h-14 rounded-xl bg-white/10 backdrop-blur-sm border border-white/10 flex items-center justify-center text-2xl text-white/70 shrink-0">
+                        <i class="fa-solid fa-gamepad"></i>
+                    </div>
+                    <div class="flex-1 space-y-5">
+                        <!-- En-tête -->
+                        <div>
+                            <h3 class="text-xl font-semibold text-white">Studio3L · Éditeur de jeux vidéo</h3>
+                            <div class="flex flex-wrap gap-x-6 gap-y-1 mt-1.5">
+                                <p class="text-sm text-gray-400">
+                                    <i class="fa-regular fa-calendar mr-1.5"></i>BUT2 · 2025-2026
+                                </p>
+                                <p class="text-sm text-gray-400">
+                                    <i class="fa-solid fa-graduation-cap mr-1.5"></i>PeeL · Pôle entrepreneurial · Université de Lorraine
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Description -->
+                        <p class="text-gray-300 leading-relaxed">
+                            J'ai fait mon stage chez <span class="text-white font-medium">Studio3L</span>, mon entreprise d'édition de jeux vidéo, 
+                            accompagné par le <span class="text-white font-medium">PeeL</span> qui aide les étudiants à lancer leur projet. 
+                            J'y ai conçu trois plateformes web, appris TailwindCSS et PostgreSQL que je ne connaissais pas, 
+                            et découvert la business intelligence avec PostHog. 
+                            J'ai aussi géré toute la paperasse : business model, contrats avec les studios de développement.
+                        </p>
+
+                        <!-- Plateformes réalisées -->
+                        <div class="space-y-3">
+                            <h4 class="text-sm font-semibold text-gray-300">
+                                <i class="fa-solid fa-laptop-code mr-1.5"></i>Plateformes développées
+                            </h4>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                <a href="https://survey.studio3l.fr/" target="_blank" rel="noopener" class="bg-white/[0.03] hover:bg-white/[0.06] border border-white/[0.06] hover:border-white/[0.12] rounded-xl p-3 transition-all duration-200 group/trace">
+                                    <div class="flex items-center gap-2 mb-1.5">
+                                        <i class="fa-solid fa-comment-dots text-gray-400 group-hover/trace:text-white transition-colors text-sm"></i>
+                                        <span class="text-sm font-medium text-white">Survey</span>
+                                    </div>
+                                    <p class="text-xs text-gray-500 leading-relaxed mb-2">Plateforme de feedback : avis, sondages, formulaires de recrutement.</p>
+                                    <span class="text-[10px] text-gray-600 group-hover/trace:text-gray-400 transition-colors">survey.studio3l.fr</span>
+                                </a>
+
+                                <a href="https://dev.studio3l.fr/" target="_blank" rel="noopener" class="bg-white/[0.03] hover:bg-white/[0.06] border border-white/[0.06] hover:border-white/[0.12] rounded-xl p-3 transition-all duration-200 group/trace">
+                                    <div class="flex items-center gap-2 mb-1.5">
+                                        <i class="fa-solid fa-code-branch text-gray-400 group-hover/trace:text-white transition-colors text-sm"></i>
+                                        <span class="text-sm font-medium text-white">Dev Portal</span>
+                                    </div>
+                                    <p class="text-xs text-gray-500 leading-relaxed mb-2">Espace studios : suivi des revenus, envoi de builds de jeux.</p>
+                                    <span class="text-[10px] text-gray-600 group-hover/trace:text-gray-400 transition-colors">dev.studio3l.fr</span>
+                                </a>
+
+                                <a href="https://studio3l.fr/press/" target="_blank" rel="noopener" class="bg-white/[0.03] hover:bg-white/[0.06] border border-white/[0.06] hover:border-white/[0.12] rounded-xl p-3 transition-all duration-200 group/trace">
+                                    <div class="flex items-center gap-2 mb-1.5">
+                                        <i class="fa-solid fa-newspaper text-gray-400 group-hover/trace:text-white transition-colors text-sm"></i>
+                                        <span class="text-sm font-medium text-white">Press Kit</span>
+                                    </div>
+                                    <p class="text-xs text-gray-500 leading-relaxed mb-2">Espace presse : blogs, journalistes, youtubeurs & streamers.</p>
+                                    <span class="text-[10px] text-gray-600 group-hover/trace:text-gray-400 transition-colors">studio3l.fr/press</span>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Compétences -->
+                        <div class="flex flex-wrap gap-2">
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-white/[0.05] text-gray-300 border border-white/[0.06]">
+                                <i class="fa-solid fa-code text-[10px]"></i> TailwindCSS
+                            </span>
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-white/[0.05] text-gray-300 border border-white/[0.06]">
+                                <i class="fa-solid fa-database text-[10px]"></i> PostgreSQL
+                            </span>
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-white/[0.05] text-gray-300 border border-white/[0.06]">
+                                <i class="fa-solid fa-chart-line text-[10px]"></i> PostHog
+                            </span>
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-white/[0.05] text-gray-300 border border-white/[0.06]">
+                                <i class="fa-solid fa-file-contract text-[10px]"></i> Business Model
+                            </span>
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-white/[0.05] text-gray-300 border border-white/[0.06]">
+                                <i class="fa-solid fa-handshake text-[10px]"></i> Contrats
+                            </span>
+                        </div>
+
+                        <!-- Admin / PeeL -->
+                        <div class="pt-4 border-t border-white/[0.06]">
+                            <h4 class="text-sm font-semibold text-gray-300 mb-2">
+                                <i class="fa-solid fa-briefcase mr-1.5"></i>Volet administratif · PeeL
+                            </h4>
+                            <p class="text-sm text-gray-400 leading-relaxed">
+                                En parallèle du développement, j'ai rempli les documents exigés par le PeeL : 
+                                business model canvas, étude de marché, contrats pour les studios de développement partenaires. 
+                                Cette double casquette développeur · entrepreneur a été extrêmement formatrice.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ───── PROJETS PERSONNELS ───── -->
+        <section id="projets" class="mb-32 scroll-mt-28">
+            <h2 class="text-3xl sm:text-4xl font-bold text-white mb-2">Projets Personnels</h2>
+            <p class="text-gray-400 mb-6">Entreprises, associations et services · Hors IUT</p>
+            <div class="w-12 h-1 rounded-full bg-gradient-to-r from-white/40 to-white/10 mb-10"></div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+
+                <!-- NeoHeberg -->
+                <div class="bg-white/[0.04] backdrop-blur-md border border-white/[0.08] rounded-2xl p-5 hover:bg-white/[0.06] hover:border-white/[0.15] transition-all duration-300 group">
+                    <div class="flex items-start gap-3 mb-3">
+                        <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-lg text-white/70 group-hover:text-white shrink-0 transition-colors">
+                            <i class="fa-solid fa-cloud"></i>
+                        </div>
+                        <div class="min-w-0">
+                            <h3 class="text-base font-semibold text-white">NeoHeberg</h3>
+                            <p class="text-xs text-gray-500 mt-0.5">Hébergeur gratuit · Association</p>
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-400 leading-relaxed mb-3">
+                        Hébergeur web gratuit opéré par une association dont je suis le président, 
+                        avec Noah Luccin (co-président), Tristan Garcia (trésorier) et Milo Bastien (secrétaire).
+                    </p>
+                    <div class="flex items-center gap-3 pt-3 border-t border-white/[0.04]">
+                        <a href="https://neoheberg.fr" target="_blank" rel="noopener" class="text-xs text-gray-500 hover:text-white transition-colors flex items-center gap-1">
+                            <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i> neoheberg.fr
+                        </a>
+                        <a href="https://github.com/NeoHeberg" target="_blank" rel="noopener" class="text-xs text-gray-500 hover:text-white transition-colors flex items-center gap-1">
+                            <i class="fa-brands fa-github text-[10px]"></i> NeoHeberg
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Agence Prestige Numérique -->
+                <div class="bg-white/[0.04] backdrop-blur-md border border-white/[0.08] rounded-2xl p-5 hover:bg-white/[0.06] hover:border-white/[0.15] transition-all duration-300 group">
+                    <div class="flex items-start gap-3 mb-3">
+                        <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-lg text-white/70 group-hover:text-white shrink-0 transition-colors">
+                            <i class="fa-solid fa-briefcase"></i>
+                        </div>
+                        <div class="min-w-0">
+                            <h3 class="text-base font-semibold text-white">Agence Prestige Numérique</h3>
+                            <p class="text-xs text-gray-500 mt-0.5">Agence web · Prestation de services</p>
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-400 leading-relaxed mb-3">
+                        Mon agence web : création de sites vitrines, applications sur mesure 
+                        et conseil en stratégie digitale pour les professionnels.
+                    </p>
+                    <div class="flex items-center gap-3 pt-3 border-t border-white/[0.04]">
+                        <a href="https://agence-prestige-numerique.fr/" target="_blank" rel="noopener" class="text-xs text-gray-500 hover:text-white transition-colors flex items-center gap-1">
+                            <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i> agence-prestige-numerique.fr
+                        </a>
+                        <a href="https://github.com/Agence-Prestige-Numerique" target="_blank" rel="noopener" class="text-xs text-gray-500 hover:text-white transition-colors flex items-center gap-1">
+                            <i class="fa-brands fa-github text-[10px]"></i> GitHub
+                        </a>
+                    </div>
+                </div>
+
+                <!-- ClipUrl -->
+                <div class="bg-white/[0.04] backdrop-blur-md border border-white/[0.08] rounded-2xl p-5 hover:bg-white/[0.06] hover:border-white/[0.15] transition-all duration-300 group">
+                    <div class="flex items-start gap-3 mb-3">
+                        <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-lg text-white/70 group-hover:text-white shrink-0 transition-colors">
+                            <i class="fa-solid fa-link"></i>
+                        </div>
+                        <div class="min-w-0">
+                            <h3 class="text-base font-semibold text-white">ClipUrl</h3>
+                            <p class="text-xs text-gray-500 mt-0.5">Raccourcisseur de lien · Monétisé</p>
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-400 leading-relaxed mb-3">
+                        Service de raccourcissement de liens avec système de monétisation intégré. 
+                        Permet de créer des liens courts traçables et de générer des revenus publicitaires.
+                    </p>
+                    <div class="flex items-center gap-3 pt-3 border-t border-white/[0.04]">
+                        <a href="https://clipurl.fr/" target="_blank" rel="noopener" class="text-xs text-gray-500 hover:text-white transition-colors flex items-center gap-1">
+                            <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i> clipurl.fr
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Studio3L -->
+                <div class="bg-white/[0.04] backdrop-blur-md border border-white/[0.08] rounded-2xl p-5 hover:bg-white/[0.06] hover:border-white/[0.15] transition-all duration-300 group">
+                    <div class="flex items-start gap-3 mb-3">
+                        <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-lg text-white/70 group-hover:text-white shrink-0 transition-colors">
+                            <i class="fa-solid fa-gamepad"></i>
+                        </div>
+                        <div class="min-w-0">
+                            <h3 class="text-base font-semibold text-white">Studio3L</h3>
+                            <p class="text-xs text-gray-500 mt-0.5">Éditeur de jeux vidéo</p>
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-400 leading-relaxed mb-3">
+                        Studio d'édition de jeux vidéo. Plateformes web développées pour les studios partenaires 
+                        et l'espace presse (détaillées dans la section Stage).
+                    </p>
+                    <div class="flex items-center gap-3 pt-3 border-t border-white/[0.04]">
+                        <a href="https://studio3l.fr/press/" target="_blank" rel="noopener" class="text-xs text-gray-500 hover:text-white transition-colors flex items-center gap-1">
+                            <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i> studio3l.fr
+                        </a>
+                        <a href="https://github.com/orgs/Studio-3L" target="_blank" rel="noopener" class="text-xs text-gray-500 hover:text-white transition-colors flex items-center gap-1">
+                            <i class="fa-brands fa-github text-[10px]"></i> Studio-3L
+                        </a>
+                    </div>
+                </div>
+
+            </div>
         </section>
 
     </main>
 
+    <!-- ═══════════════════════════════════════ -->
+    <!-- MODAL SAÉ — Overlay full-screen -->
+    <!-- ═══════════════════════════════════════ -->
+    <div id="sae-modal"
+        class="fixed inset-0 z-[100] hidden items-center justify-center p-4 sm:p-6 bg-black/70 backdrop-blur-sm"
+        role="dialog" aria-modal="true" aria-labelledby="sae-modal-title">
+
+        <div id="sae-modal-content"
+            class="bg-white/[0.05] backdrop-blur-lg border border-white/[0.08] rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden shadow-2xl shadow-black/60 flex flex-col opacity-0 scale-95 transition-all duration-200 ease-out">
+
+            <!-- En-tête -->
+            <div class="flex items-start justify-between p-5 sm:p-6 border-b border-white/[0.06] shrink-0">
+                <div class="flex items-center gap-3 min-w-0">
+                    <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-lg shrink-0" id="sae-modal-icon">
+                        <i class="fa-solid fa-folder-open"></i>
+                    </div>
+                    <h3 class="text-lg sm:text-xl font-bold text-white truncate" id="sae-modal-title">Titre SAÉ</h3>
+                </div>
+                <button id="sae-modal-close"
+                    class="w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 border border-white/5 hover:border-white/10 flex items-center justify-center text-gray-400 hover:text-white transition-all duration-200 shrink-0 ml-3"
+                    aria-label="Fermer">
+                    <i class="fa-solid fa-xmark text-sm"></i>
+                </button>
+            </div>
+
+            <!-- Onglets -->
+            <div class="flex gap-1 px-5 sm:px-6 pt-4 border-b border-white/[0.04] shrink-0 overflow-x-auto" id="sae-modal-tabs">
+                <!-- Rempli dynamiquement par sae.js -->
+            </div>
+
+            <!-- Contenu -->
+            <div class="p-5 sm:p-6 overflow-y-auto flex-1" id="sae-modal-body">
+                <!-- Rempli dynamiquement par sae.js -->
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════ -->
+    <!-- FOOTER -->
+    <!-- ═══════════════════════════════════════ -->
+    <footer class="mt-20 relative">
+        <!-- Ligne supérieure subtile -->
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-24 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+
+        <div class="max-w-5xl mx-auto px-5 py-10">
+            
+            <!-- Rangée principale -->
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-6 mb-6">
+                
+                <!-- Branding -->
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-xl bg-white/[0.05] backdrop-blur-sm border border-white/[0.08] flex items-center justify-center">
+                        <lord-icon
+                            src="https://cdn.lordicon.com/piurhpdv.json"
+                            trigger="loop"
+                            colors="primary:#d1d5db,secondary:#6b7280"
+                            style="width:22px;height:22px">
+                        </lord-icon>
+                    </div>
+                    <div>
+                        <p class="text-sm font-medium text-gray-300">Axel Lalaut</p>
+                        <p class="text-xs text-gray-500">Portfolio SAE · BUT Informatique</p>
+                    </div>
+                </div>
+
+                <!-- Liens sections -->
+                <div class="flex flex-wrap justify-center gap-x-5 gap-y-1 text-xs text-gray-500">
+                    <a href="#accueil" class="hover:text-gray-300 transition-colors">Accueil</a>
+                    <a href="#sae" class="hover:text-gray-300 transition-colors">SAÉ</a>
+                    <a href="#tp" class="hover:text-gray-300 transition-colors">TP</a>
+                    <a href="#stage" class="hover:text-gray-300 transition-colors">Stage</a>
+                    <a href="#projets" class="hover:text-gray-300 transition-colors">Projets</a>
+                </div>
+
+                <!-- Social -->
+                <a href="https://github.com/Axxel-L" target="_blank" rel="noopener" class="flex items-center gap-2 px-4 py-2 rounded-full bg-white/[0.04] border border-white/[0.06] text-xs text-gray-400 hover:text-white hover:bg-white/[0.08] hover:border-white/[0.12] transition-all duration-200">
+                    <i class="fa-brands fa-github"></i>
+                    <span class="hidden sm:inline">Axxel-L</span>
+                </a>
+
+            </div>
+
+            <!-- Ligne bas -->
+            <div class="pt-5 border-t border-white/[0.04] flex flex-col sm:flex-row items-center justify-between gap-2">
+                <p class="text-[11px] text-gray-600">Université de Lorraine · IUT Saint-Dié-Des-Vosges</p>
+                <p class="text-[11px] text-gray-600">BUT2 Informatique · 2024/2025</p>
+            </div>
+
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.lordicon.com/lordicon.js"></script>
     <script src="sae.js"></script>
     <script src="navbar.js"></script>
     <script src="grid.js"></script>

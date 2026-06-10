@@ -1,5 +1,6 @@
 /**
  * Détecte la section visible et active le lien correspondant dans la navbar.
+ * Dark theme — glass pill avec 5 sections.
  */
 
 (function () {
@@ -28,9 +29,11 @@
 
   function updateActiveLink() {
     var scrollY = window.pageYOffset;
+    // Trouve la dernière section dont le haut est au-dessus du scroll
+    // (évite le flash "Accueil" entre deux sections)
     var current = 'accueil';
-    for (var i = 0; i < sectionTops.length; i++) {
-      if (scrollY >= sectionTops[i].top && scrollY < sectionTops[i].bottom) {
+    for (var i = sectionTops.length - 1; i >= 0; i--) {
+      if (scrollY >= sectionTops[i].top) {
         current = sectionTops[i].id;
         break;
       }
@@ -41,10 +44,11 @@
     navLinks.forEach(function (link) {
       var id = link.getAttribute('data-section');
       var active = id === current;
-      link.classList.toggle('bg-gray-200', active);
-      link.classList.toggle('text-gray-900', active);
+      // Dark glass : fond blanc/10, texte blanc, semibold
+      link.classList.toggle('bg-white/10', active);
+      link.classList.toggle('text-white', active);
       link.classList.toggle('font-semibold', active);
-      link.classList.toggle('text-gray-600', !active);
+      link.classList.toggle('text-gray-400', !active);
     });
   }
 
