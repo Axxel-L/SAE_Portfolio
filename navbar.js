@@ -1,6 +1,5 @@
 /**
- * Détecte la section visible et active le lien correspondant dans la navbar.
- * Dark theme — glass pill avec 5 sections.
+ * Navigation liquide avec détection de section visible au scroll.
  */
 
 (function () {
@@ -11,10 +10,10 @@
   var sectionTops = [];
   var prevSection = null;
 
-  // =========================================================================
-  // 1. CACHE DES POSITIONS
-  // =========================================================================
-
+  /**
+   * Calcule et met en cache les positions verticales de chaque section.
+   * Un décalage de 140px est appliqué pour compenser la hauteur de la navbar fixe.
+   */
   function cacheSections() {
     sectionTops = [];
     sections.forEach(function (s) {
@@ -23,14 +22,13 @@
     });
   }
 
-  // =========================================================================
-  // 2. MISE À JOUR DU LIEN ACTIF
-  // =========================================================================
-
+  /**
+   * Met à jour le lien actif dans la navbar selon la position de défilement.
+   * Parcourt les sections de la dernière à la première pour éviter un flash
+   * entre deux sections. Applique les classes Tailwind actives/inactives.
+   */
   function updateActiveLink() {
     var scrollY = window.pageYOffset;
-    // Trouve la dernière section dont le haut est au-dessus du scroll
-    // (évite le flash "Accueil" entre deux sections)
     var current = 'accueil';
     for (var i = sectionTops.length - 1; i >= 0; i--) {
       if (scrollY >= sectionTops[i].top) {
@@ -44,7 +42,6 @@
     navLinks.forEach(function (link) {
       var id = link.getAttribute('data-section');
       var active = id === current;
-      // Dark glass : fond blanc/10, texte blanc, semibold
       link.classList.toggle('bg-white/10', active);
       link.classList.toggle('text-white', active);
       link.classList.toggle('font-semibold', active);
@@ -55,10 +52,6 @@
   cacheSections();
   updateActiveLink();
 
-  // =========================================================================
-  // 3. SCROLL (rAF THROTTLE)
-  // =========================================================================
-
   var ticking = false;
   window.addEventListener('scroll', function () {
     if (!ticking) {
@@ -67,19 +60,11 @@
     }
   }, { passive: true });
 
-  // =========================================================================
-  // 4. RESIZE (DEBOUNCE)
-  // =========================================================================
-
   var resizeTimer;
   window.addEventListener('resize', function () {
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(function () { cacheSections(); updateActiveLink(); }, 200);
   }, { passive: true });
-
-  // =========================================================================
-  // 5. SMOOTH SCROLL AU CLIC
-  // =========================================================================
 
   navLinks.forEach(function (link) {
     link.addEventListener('click', function (e) {

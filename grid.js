@@ -1,9 +1,6 @@
 /**
- * Grille 24×14 de carrés animés — palette sombre monochrome.
- * Magnet (attraction souris), épulsion au clic,
- * ripple blanc discret, drift autonome. Fond fixe.
- *
- * Optimisé : opacité relevée, lerp plus rapide, drift amplifié.
+ * Grille animée 24×14 de carrés avec effets d'attraction, d'explosion au clic
+ * et de drift autonome sur fond fixe.
  */
 
 (function () {
@@ -12,10 +9,6 @@
   var gridEl = document.getElementById('squareGrid');
   if (!gridEl) return;
 
-  // =========================================================================
-  // 1. GÉNÉRATION DE LA GRILLE
-  // =========================================================================
-
   var COLS = 24;
   var ROWS = 14;
   var cells = [];
@@ -23,8 +16,6 @@
   var frag = document.createDocumentFragment();
   for (var r = 0; r < ROWS; r++) {
     for (var c = 0; c < COLS; c++) {
-      // Palette sombre monochrome : gris ardoise quasi-noir
-      // Luminosité 9-23 % (plus visible), saturation 6-14 % (léger caractère)
       var hue = 222;
       var sat = 6 + (c / (COLS - 1)) * 8;
       var lit = 9 + (r / (ROWS - 1)) * 14;
@@ -39,19 +30,11 @@
   }
   gridEl.appendChild(frag);
 
-  // =========================================================================
-  // 2. ÉTAT DE L'ANIMATION
-  // =========================================================================
-
   var running       = true;
   var mx = 0.5, my  = 0.5;
   var tMx = 0.5, tMy = 0.5;
   var clickX = 0.5, clickY = 0.5;
   var explosionTime = -99;
-
-  // =========================================================================
-  // 3. ÉCOUTEURS
-  // =========================================================================
 
   document.addEventListener('mousemove', function (e) {
     tMx = e.clientX / window.innerWidth;
@@ -76,15 +59,18 @@
     else { running = true; requestAnimationFrame(frame); }
   }, { passive: true });
 
-  // =========================================================================
-  // 4. BOUCLE D'ANIMATION
-  // =========================================================================
-
+  /**
+   * Boucle d'animation principale.
+   * Calcule pour chaque cellule : l'attraction magnétique vers le curseur,
+   * l'onde d'explosion au clic (échelle + opacité), et le drift sinusoïdal
+   * autonome. Applique transform et opacity directement sur le DOM.
+   *
+   * @param {number} ts - Timestamp DOMHighResTimeStamp fourni par requestAnimationFrame
+   */
   function frame(ts) {
     if (!running) return requestAnimationFrame(frame);
     var sec = ts * 0.001;
 
-    // Magnet : lerp 2× plus réactif (0.05 → 0.10)
     mx += (tMx - mx) * 0.10;
     my += (tMy - my) * 0.10;
 
@@ -98,7 +84,6 @@
       var dist = Math.sqrt(dx * dx + dy * dy);
       var inf  = Math.max(0, 1 - dist * 2.0);
 
-      // Pull : force augmentée (22 → 34)
       var pullX = dx * inf * 34;
       var pullY = dy * inf * 34;
 
@@ -110,20 +95,16 @@
         var delay = dc * 0.08;
         var ea    = Math.max(0, expAge - delay);
         var force = Math.exp(-ea * 5.5) * Math.exp(-dc * 1.6);
-        // Explosion : force amplifiée (38 → 52, scale ×0.18 → ×0.26, op ×0.25 → ×0.35)
         pushX    = dxc * force * 52;
         pushY    = dyc * force * 52;
         expScale = force * 0.26;
         expOp    = force * 0.35;
       }
 
-      // Scale base plus grande (0.78 → 0.84) pour des carrés plus présents
       var s   = 0.84 + inf * 0.45 + expScale;
       var rot = (dx * dy) * inf * 2.5;
-      // Opacité base relevée (0.25 → 0.42) — bien visible sur fond noir
       var op  = 0.42 + inf * 0.55 + expOp;
 
-      // Drift : plus rapide (0.35→0.72, 0.30→0.60) et plus ample (3.5→6.5, 2.5→5)
       var phase = c.cx * 4 + c.cy * 3;
       var dftX  = Math.sin(sec * 0.72 + phase) * 6.5;
       var dftY  = Math.cos(sec * 0.60 + phase) * 5;

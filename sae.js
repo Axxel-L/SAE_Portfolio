@@ -1,18 +1,37 @@
 /**
- * - Cartes liquid-glass
- * - Au clic → ouverture d'un modal avec 5 onglets
- * - Onglets : Ressources | Implication | Apprentissages | À venir | Traces
+ * Gestion des cartes SAÉ et du modal de détails à 5 onglets.
+ *
+ * Affiche les Situations d'Apprentissage et d'Évaluation sous forme
+ * de cartes interactives. Au clic sur une carte, un modal s'ouvre avec
+ * cinq onglets : Ressources, Implication, Apprentissages, À venir, Traces.
  */
 
 (function () {
   'use strict';
 
-  // =========================================================================
-  // 1. DONNÉES DES SAÉ
-  // =========================================================================
+  /**
+   * @typedef {Object} SaeTrace
+   * @property {string} type  - Type de trace (github, pdf, link, image, video)
+   * @property {string} url   - URL de la trace
+   * @property {string} label - Libellé affiché
+   */
 
+  /**
+   * @typedef {Object} SaeEntry
+   * @property {string}     id          - Identifiant (ex: "S3.A.01")
+   * @property {string}     titre       - Titre complet de la SAÉ
+   * @property {string}     icone       - Classe Font Awesome pour l'icône
+   * @property {string}     resume      - Résumé affiché sur la carte
+   * @property {string[]}   competences - Liste des compétences
+   * @property {Object}     ressources  - Détail des ressources (enseignements, externes, bilan)
+   * @property {Object}     implication - Détail de l'implication (modalité, répartition, interaction, autonomie)
+   * @property {Object}     apprentissages - Détail des apprentissages (évolution, pointsForts, pointsFaibles, aRefaire)
+   * @property {Object}     aVenir      - Objectifs futurs (objectifs, moyens)
+   * @property {SaeTrace[]} traces      - Liste des traces
+   */
+
+  /** @type {SaeEntry[]} */
   var saeData = [
-    // SAÉ S3.A.01
     {
       id: 'S3.A.01',
       titre: 'SAÉ S3.A.01 — Application Web de Gestion Électorale',
@@ -58,7 +77,6 @@
       ]
     },
 
-    // SAÉ S4.A.01 
     {
       id: 'S4.A.01',
       titre: 'SAÉ S4.A.01 — Optimisation et Sécurisation d\'une Application Web',
@@ -106,10 +124,7 @@
     }
   ];
 
-  // =========================================================================
-  // 2. ICÔNES DE TRACE PAR TYPE
-  // =========================================================================
-
+  /** @type {Object<string, string>} Icônes Font Awesome associées à chaque type de trace */
   var traceIcons = {
     github: 'fa-brands fa-github',
     pdf: 'fa-solid fa-file-pdf',
@@ -118,13 +133,15 @@
     video: 'fa-solid fa-video'
   };
 
-  // =========================================================================
-  // 3. RENDU DES CARTES SAÉ
-  // =========================================================================
-
   var container = document.getElementById('sae-container');
   if (!container) return;
 
+  /**
+   * Construit le HTML d'une carte SAÉ.
+   *
+   * @param   {SaeEntry} sae - L'entrée SAÉ à afficher
+   * @returns {string}        HTML de la carte
+   */
   function buildCard(sae) {
     var tagsHtml = sae.competences.map(function (c) {
       return '<span class="bg-white/[0.04] border border-white/[0.06] text-gray-400 text-xs px-2 py-0.5 rounded-full">' + c + '</span>';
@@ -152,10 +169,6 @@
 
   container.innerHTML = saeData.map(buildCard).join('');
 
-  // =========================================================================
-  // 4. MODAL
-  // =========================================================================
-
   var modal        = document.getElementById('sae-modal');
   var modalContent = document.getElementById('sae-modal-content');
   var modalTabs    = document.getElementById('sae-modal-tabs');
@@ -172,26 +185,25 @@
     { id: 'traces',         label: 'Traces',         icon: 'fa-solid fa-paperclip' }
   ];
 
-  // ─── Garde anti-conflit ouverture/fermeture ──────────────────────────
-
   var _closeHandler = null;
 
-  // ─── Ouverture ────────────────────────────────────────────────────────
-
+  /**
+   * Ouvre le modal pour une SAÉ donnée.
+   * Annule toute fermeture en cours, construit les onglets, affiche le premier
+   * onglet (Ressources) et anime l'entrée du modal.
+   *
+   * @param {SaeEntry} sae - La SAÉ à afficher dans le modal
+   */
   function openModal(sae) {
-    // Annuler toute fermeture en cours
     if (_closeHandler) {
       modalContent.removeEventListener('transitionend', _closeHandler);
       _closeHandler = null;
     }
-    // Marquer la SAÉ courante
     modal.setAttribute('data-current-sae-id', sae.id);
 
-    // En-tête
     modalIcon.innerHTML = '<i class="' + sae.icone + '"></i>';
     modalTitle.textContent = sae.titre;
 
-    // Onglets
     var tabsHtml = TAB_CONFIG.map(function (tab, i) {
       var isActive = i === 0;
       return '<button class="sae-modal-tab flex items-center gap-1.5 px-3 py-2.5 text-sm font-medium rounded-t-lg border-b-2 transition-colors duration-150 shrink-0 ' +
@@ -205,15 +217,12 @@
     }).join('');
     modalTabs.innerHTML = tabsHtml;
 
-    // Contenu du premier onglet
     renderTabContent('ressources', sae);
 
-    // Afficher
     modal.style.display = 'flex';
     modal.classList.remove('hidden');
     document.body.style.overflow = 'hidden';
 
-    // Animer l'entrée
     requestAnimationFrame(function () {
       modalContent.classList.remove('opacity-0', 'scale-95');
       modalContent.classList.add('opacity-100', 'scale-100');
@@ -222,8 +231,10 @@
     modalClose.focus();
   }
 
-  // ─── Fermeture ────────────────────────────────────────────────────────
-
+  /**
+   * Ferme le modal avec une animation de sortie.
+   * Attend la fin de la transition CSS avant de masquer complètement le modal.
+   */
   function closeModal() {
     modalContent.classList.add('opacity-0', 'scale-95');
     modalContent.classList.remove('opacity-100', 'scale-100');
@@ -239,18 +250,20 @@
     modalContent.addEventListener('transitionend', onTransitionEnd);
   }
 
-  // ─── Rendu d'un onglet ────────────────────────────────────────────────
-
+  /**
+   * Génère le contenu HTML d'un onglet du modal en fonction de son identifiant.
+   *
+   * @param {string}   tabId - Identifiant de l'onglet (ressources, implication, apprentissages, avenir, traces)
+   * @param {SaeEntry} sae   - La SAÉ dont on affiche les détails
+   */
   function renderTabContent(tabId, sae) {
     var html = '';
 
     switch (tabId) {
 
-      // ── Ressources ────────────────────────────────────────────────
       case 'ressources':
         html += '<div class="space-y-4">';
 
-        // Enseignements
         html += '<div>';
         html += '<h4 class="text-sm font-semibold text-gray-300 mb-2"><i class="fa-solid fa-chalkboard-user mr-2"></i>Ressources pédagogiques</h4>';
         html += '<ul class="space-y-2">';
@@ -263,7 +276,6 @@
         });
         html += '</ul></div>';
 
-        // Externes
         if (sae.ressources.externes.length > 0) {
           html += '<div>';
           html += '<h4 class="text-sm font-semibold text-gray-300 mb-2"><i class="fa-solid fa-globe mr-2"></i>Ressources externes</h4>';
@@ -278,7 +290,6 @@
           html += '</ul></div>';
         }
 
-        // Bilan
         html += '<div class="bg-white/[0.03] border border-white/[0.06] rounded-xl p-4">';
         html += '<p class="text-xs font-semibold text-gray-400 mb-1.5"><i class="fa-solid fa-scale-balanced mr-1.5"></i>Bilan</p>';
         html += '<p class="text-sm text-gray-300 leading-relaxed">' + sae.ressources.bilan + '</p>';
@@ -287,75 +298,61 @@
         html += '</div>';
         break;
 
-      // ── Implication ───────────────────────────────────────────────
       case 'implication':
-        html += '<div class="space-y-3">';
-
-        var impFields = [
-          { icon: 'fa-solid fa-people-group', label: 'Modalité',    value: sae.implication.modalite },
-          { icon: 'fa-solid fa-list-check',   label: 'Répartition', value: sae.implication.repartition },
-          { icon: 'fa-solid fa-comments',     label: 'Interaction', value: sae.implication.interaction },
-          { icon: 'fa-solid fa-person-walking', label: 'Autonomie', value: sae.implication.autonomie }
-        ];
-
-        impFields.forEach(function (f) {
-          html += '<div class="flex items-start gap-3 bg-white/[0.03] rounded-lg p-3">';
-          html += '<i class="' + f.icon + ' text-gray-500 mt-0.5 shrink-0"></i>';
-          html += '<div>';
-          html += '<p class="text-xs font-semibold text-gray-400 mb-0.5">' + f.label + '</p>';
-          html += '<p class="text-sm text-gray-300 leading-relaxed">' + f.value + '</p>';
-          html += '</div></div>';
-        });
-
+        html += '<div class="space-y-4">';
+        html += '<div class="bg-white/[0.03] border border-white/[0.06] rounded-xl p-4">';
+        html += '<p class="text-xs font-semibold text-gray-400 mb-1.5"><i class="fa-solid fa-people-group mr-1.5"></i>Modalité</p>';
+        html += '<p class="text-sm text-gray-300">' + sae.implication.modalite + '</p>';
+        html += '</div>';
+        html += '<div class="bg-white/[0.03] border border-white/[0.06] rounded-xl p-4">';
+        html += '<p class="text-xs font-semibold text-gray-400 mb-1.5"><i class="fa-solid fa-list-check mr-1.5"></i>Répartition</p>';
+        html += '<p class="text-sm text-gray-300">' + sae.implication.repartition + '</p>';
+        html += '</div>';
+        html += '<div class="bg-white/[0.03] border border-white/[0.06] rounded-xl p-4">';
+        html += '<p class="text-xs font-semibold text-gray-400 mb-1.5"><i class="fa-solid fa-comments mr-1.5"></i>Interaction</p>';
+        html += '<p class="text-sm text-gray-300">' + sae.implication.interaction + '</p>';
+        html += '</div>';
+        html += '<div class="bg-white/[0.03] border border-white/[0.06] rounded-xl p-4">';
+        html += '<p class="text-xs font-semibold text-gray-400 mb-1.5"><i class="fa-solid fa-person-walking mr-1.5"></i>Autonomie</p>';
+        html += '<p class="text-sm text-gray-300">' + sae.implication.autonomie + '</p>';
+        html += '</div>';
         html += '</div>';
         break;
 
-      // ── Apprentissages ────────────────────────────────────────────
       case 'apprentissages':
         html += '<div class="space-y-4">';
-
-        html += '<p class="text-sm text-gray-300 leading-relaxed">' + sae.apprentissages.evolution + '</p>';
-
-        html += '<div class="grid grid-cols-1 sm:grid-cols-2 gap-3">';
-        // Points forts
-        html += '<div class="bg-emerald-950/30 border border-emerald-500/20 rounded-xl p-4">';
-        html += '<p class="text-xs font-semibold text-emerald-400 mb-1"><i class="fa-solid fa-check-circle mr-1.5"></i>Points forts</p>';
-        html += '<p class="text-sm text-emerald-200/80 leading-relaxed">' + sae.apprentissages.pointsForts + '</p>';
-        html += '</div>';
-        // Axes d'amélioration
-        html += '<div class="bg-amber-950/30 border border-amber-500/20 rounded-xl p-4">';
-        html += '<p class="text-xs font-semibold text-amber-400 mb-1"><i class="fa-solid fa-arrow-trend-up mr-1.5"></i>Axes d\'amélioration</p>';
-        html += '<p class="text-sm text-amber-200/80 leading-relaxed">' + sae.apprentissages.pointsFaibles + '</p>';
-        html += '</div>';
-        html += '</div>';
-
-        // Si c'était à refaire
         html += '<div class="bg-white/[0.03] border border-white/[0.06] rounded-xl p-4">';
-        html += '<p class="text-xs font-semibold text-gray-400 mb-1"><i class="fa-solid fa-rotate-left mr-1.5"></i>Si c\'était à refaire</p>';
+        html += '<p class="text-xs font-semibold text-gray-400 mb-1.5"><i class="fa-solid fa-arrow-trend-up mr-1.5"></i>Évolution</p>';
+        html += '<p class="text-sm text-gray-300">' + sae.apprentissages.evolution + '</p>';
+        html += '</div>';
+        html += '<div class="bg-white/[0.03] border border-white/[0.06] rounded-xl p-4">';
+        html += '<p class="text-xs font-semibold text-gray-400 mb-1.5"><i class="fa-solid fa-check mr-1.5"></i>Points forts</p>';
+        html += '<p class="text-sm text-gray-300">' + sae.apprentissages.pointsForts + '</p>';
+        html += '</div>';
+        html += '<div class="bg-white/[0.03] border border-white/[0.06] rounded-xl p-4">';
+        html += '<p class="text-xs font-semibold text-gray-400 mb-1.5"><i class="fa-solid fa-triangle-exclamation mr-1.5"></i>Points faibles</p>';
+        html += '<p class="text-sm text-gray-300">' + sae.apprentissages.pointsFaibles + '</p>';
+        html += '</div>';
+        html += '<div class="bg-white/[0.03] border border-white/[0.06] rounded-xl p-4">';
+        html += '<p class="text-xs font-semibold text-gray-400 mb-1.5"><i class="fa-solid fa-rotate-left mr-1.5"></i>Si c\'était à refaire</p>';
         html += '<p class="text-sm text-gray-300 leading-relaxed italic">« ' + sae.apprentissages.aRefaire + ' »</p>';
         html += '</div>';
-
         html += '</div>';
         break;
 
-      // ── À venir ───────────────────────────────────────────────────
       case 'avenir':
         html += '<div class="space-y-4">';
-
         html += '<div class="bg-white/[0.03] border border-white/[0.06] rounded-xl p-4">';
         html += '<p class="text-xs font-semibold text-gray-400 mb-1.5"><i class="fa-solid fa-bullseye mr-1.5"></i>Objectifs</p>';
         html += '<p class="text-sm text-gray-300 leading-relaxed">' + sae.aVenir.objectifs + '</p>';
         html += '</div>';
-
         html += '<div class="bg-white/[0.03] border border-white/[0.06] rounded-xl p-4">';
         html += '<p class="text-xs font-semibold text-gray-400 mb-1.5"><i class="fa-solid fa-toolbox mr-1.5"></i>Moyens</p>';
         html += '<p class="text-sm text-gray-300 leading-relaxed">' + sae.aVenir.moyens + '</p>';
         html += '</div>';
-
         html += '</div>';
         break;
 
-      // ── Traces ────────────────────────────────────────────────────
       case 'traces':
         if (sae.traces.length === 0) {
           html += '<div class="text-center py-8"><p class="text-sm text-gray-500 italic">Aucune trace enregistrée pour cette SAÉ.</p></div>';
@@ -386,11 +383,6 @@
     modalBody.innerHTML = html;
   }
 
-  // =========================================================================
-  // 5. ÉVÉNEMENTS
-  // =========================================================================
-
-  // Clic sur une carte SAÉ → ouvre le modal
   container.addEventListener('click', function (e) {
     var card = e.target.closest('article[data-sae-id]');
     if (!card) return;
@@ -399,32 +391,26 @@
     if (sae) openModal(sae);
   });
 
-  // Bouton de fermeture
   modalClose.addEventListener('click', closeModal);
 
-  // Clic sur l'overlay (en dehors du contenu)
   modal.addEventListener('click', function (e) {
     if (e.target === modal) closeModal();
   });
 
-  // Touche Échap
   document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
       closeModal();
     }
   });
 
-  // Changement d'onglet dans le modal
   modalTabs.addEventListener('click', function (e) {
     var tab = e.target.closest('.sae-modal-tab');
     if (!tab) return;
 
-    // SAÉ courante
     var currentSaeId = modal.getAttribute('data-current-sae-id');
     var sae = saeData.find(function (s) { return s.id === currentSaeId; });
     if (!sae) return;
 
-    // Mise à jour des classes actives
     var allTabs = modalTabs.querySelectorAll('.sae-modal-tab');
     allTabs.forEach(function (t) {
       t.classList.remove('text-white', 'border-white/40', 'bg-white/[0.04]');
@@ -433,7 +419,6 @@
     tab.classList.remove('text-gray-500', 'border-transparent');
     tab.classList.add('text-white', 'border-white/40', 'bg-white/[0.04]');
 
-    // Rendu du contenu
     var tabId = tab.getAttribute('data-tab');
     modalBody.scrollTop = 0;
     renderTabContent(tabId, sae);
