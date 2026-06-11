@@ -5,76 +5,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Portfolio · BUT Informatique</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
-                    },
-                }
-            }
-        }
-    </script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <meta name="description" content="Portfolio SAE — Axel Lalaut · BUT2 Informatique. Situations d'Apprentissage et d'Évaluation, travaux pratiques, stage et projets personnels.">
+    <meta name="keywords" content="portfolio, BUT informatique, SAE, développement web, PHP, JavaScript, TailwindCSS, IUT Saint-Dié, Axel Lalaut">
+    <meta name="author" content="Axel Lalaut">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://axel-lalaut.fr/">
+
+    <meta property="og:title" content="Portfolio SAE · BUT Informatique — Axel Lalaut">
+    <meta property="og:description" content="Découvrez mes Situations d'Apprentissage et d'Évaluation, travaux pratiques, stage et projets personnels en BUT2 Informatique.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://axel-lalaut.fr/">
+    <meta property="og:locale" content="fr_FR">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Portfolio SAE · BUT Informatique — Axel Lalaut">
+    <meta name="twitter:description" content="SAÉ, TP, stage et projets personnels en BUT2 Informatique.">
+
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://cdn.lordicon.com">
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+    <link rel="dns-prefetch" href="https://cdn.lordicon.com">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap"
-        rel="stylesheet">
-    <style>
-        .bg-decor {
-            position: fixed;
-            inset: 0;
-            z-index: -10;
-            overflow: hidden;
-            pointer-events: none;
-        }
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
 
-        .square-grid {
-            display: grid;
-            grid-template-columns: repeat(24, 1fr);
-            grid-template-rows: repeat(14, 1fr);
-            gap: 6px;
-            padding: 10px;
-            width: 100vw;
-            height: 100vh;
-        }
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-        .grid-cell {
-            border-radius: 6px;
-            will-change: transform, opacity;
-        }
-
-        .click-ripple {
-            position: fixed;
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.15);
-            pointer-events: none;
-            z-index: -5;
-            transform: translate(-50%, -50%) scale(0);
-            animation: rippleExpand 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-        }
-
-        @keyframes rippleExpand {
-            0% {
-                transform: translate(-50%, -50%) scale(0);
-                opacity: 0.6;
-            }
-
-            100% {
-                transform: translate(-50%, -50%) scale(22);
-                opacity: 0;
-            }
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-    </style>
+    <link rel="preload" href="css/style.css" as="style">
+    <link rel="preload" href="css/custom.css" as="style">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/custom.css">
 </head>
 
 <body class="bg-gray-950 text-white antialiased min-h-screen">
@@ -558,10 +519,28 @@
         </div>
     </footer>
 
-    <script src="https://cdn.lordicon.com/lordicon.js"></script>
-    <script src="sae.js"></script>
-    <script src="navbar.js"></script>
-    <script src="grid.js"></script>
+    <script src="https://cdn.lordicon.com/lordicon.js" defer></script>
+    <script src="sae.js" defer></script>
+    <script src="navbar.js" defer></script>
+    <script src="grid.js" defer></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Axel Lalaut",
+  "givenName": "Axel",
+  "familyName": "Lalaut",
+  "description": "Étudiant en BUT2 Informatique à l'IUT de Saint-Dié-des-Vosges, Université de Lorraine.",
+  "affiliation": {
+    "@type": "CollegeOrUniversity",
+    "name": "Université de Lorraine — IUT Saint-Dié-Des-Vosges"
+  },
+  "url": "https://axel-lalaut.fr/",
+  "sameAs": [
+    "https://github.com/Axxel-L"
+  ]
+}
+</script>
 </body>
 
 </html>

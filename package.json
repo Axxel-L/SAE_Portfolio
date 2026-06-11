@@ -1,0 +1,12 @@
+{
+  "name": "sae-portfolio",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Portfolio SAE — BUT2 Informatique · Axel Lalaut",
+  "scripts": {
+    "build": "tailwindcss -i ./css/tailwind.css -o ./css/style.css --content \"./**/*.html\" --minify"
+  },
+  "devDependencies": {
+    "tailwindcss": "3.4.17"
+  }
+}
